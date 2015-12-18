@@ -1,0 +1,7 @@
+parameters:
+  bml.twig_swiftmailer.class: Bml\Mailer\TwigSwiftMailer
+
+services:
+  bml.twig_swiftmailer:
+    class: %bml.twig_swiftmailer.class%
+    arguments: [@twig, @swiftmailer.mailer]

@@ -1,0 +1,27 @@
+{
+  "name": "bml/twig-swiftmailer-bundle",
+  "type": "library",
+  "description": "Swift mailer with twig templates support",
+  "keywords": ["mail","email", "mail", "twig"],
+  "homepage": "https://github.com/bOmBeLq/twig-swiftmailer-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Damian Wróblewski",
+      "email": "damianwroblewski75@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "symfony/twig-bundle": "~2.3|~3.0",
+    "swiftmailer/swiftmailer": "~4.3|~5",
+    "symfony/framework-bundle": "~2.3|~3.0"
+  },
+  "require-dev": {
+    "symfony/phpunit-bridge": "~2.7|~3.0"
+  },
+  "autoload": {
+    "psr-4": { "Bml\\TwigSwiftMailerBundle\\": "" }
+  }
+}
