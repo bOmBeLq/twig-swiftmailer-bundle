@@ -1,13 +1,12 @@
 <?php
 
-namespace Bml\Mailer;
+namespace Bml\TwigSwiftMailerBundle\Mailer;
 
 /**
  * @author Damian Wróblewski
  */
 class TwigSwiftMailer
 {
-
     /**
      * @var \Twig_Environment
      */
@@ -18,7 +17,7 @@ class TwigSwiftMailer
      */
     private $mailer;
 
-    function __construct(\Twig_Environment $twig,\Swift_Mailer $mailer)
+    public function __construct(\Twig_Environment $twig, \Swift_Mailer $mailer)
     {
         $this->twig = $twig;
         $this->mailer = $mailer;

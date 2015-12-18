@@ -1,5 +1,5 @@
 parameters:
-  bml.twig_swiftmailer.class: Bml\Mailer\TwigSwiftMailer
+  bml.twig_swiftmailer.class: Bml\TwigSwiftMailerBundle\Mailer\TwigSwiftMailer
 
 services:
   bml.twig_swiftmailer:
