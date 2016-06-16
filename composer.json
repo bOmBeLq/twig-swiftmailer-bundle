@@ -16,7 +16,8 @@
     "php": ">=5.4.0",
     "symfony/twig-bundle": "~2.3|~3.0",
     "swiftmailer/swiftmailer": "~4.3|~5",
-    "symfony/framework-bundle": "~2.3|~3.0"
+    "symfony/framework-bundle": "~2.3|~3.0",
+    "symfony/routing": "~2.3|~3.0"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "~2.7|~3.0"

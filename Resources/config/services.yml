@@ -4,4 +4,4 @@ parameters:
 services:
   bml.twig_swiftmailer:
     class: %bml.twig_swiftmailer.class%
-    arguments: [@twig, @swiftmailer.mailer]
+    arguments: [@twig, @swiftmailer.mailer, @translator, @router]
