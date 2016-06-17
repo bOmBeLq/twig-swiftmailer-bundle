@@ -30,6 +30,11 @@ class TwigSwiftMailer
      */
     private $router;
 
+    /**
+     * @var string
+     */
+    private $oldLocale;
+
     public function __construct(\Twig_Environment $twig, \Swift_Mailer $mailer, TranslatorInterface $translator, RouterInterface $router)
     {
         $this->twig = $twig;
@@ -45,45 +50,57 @@ class TwigSwiftMailer
      * @param string|array $toEmail
      * @param string $locale if you wish to setup locale use this parameter
      * @return bool
-     * @throws \Exception
+     * @throws MailerException
      */
     public function sendMessage($templateName, $context, $fromEmail, $toEmail, $locale = null)
     {
         if ($locale) {
-            $oldLocale = $this->translator->getLocale();
-            $this->translator->setLocale($locale);
+            $this->setLocale($locale);
         }
-        $this->setRouterLocale();
-        try {
-            $template = $this->twig->loadTemplate($templateName);
-            $subject = $template->renderBlock('subject', $context);
-            $textBody = $template->renderBlock('body_text', $context);
-            $htmlBody = $template->renderBlock('body_html', $context);
+        $template = $this->twig->loadTemplate($templateName);
+        $subject = $template->renderBlock('subject', $context);
+        $textBody = $template->renderBlock('body_text', $context);
+        $htmlBody = $template->renderBlock('body_html', $context);
 
-            $message = \Swift_Message::newInstance();
-            $message->setSubject($subject)
-                ->setFrom($fromEmail)
-                ->setTo($toEmail);
+        $message = \Swift_Message::newInstance();
+        $message->setSubject($subject)
+            ->setFrom($fromEmail)
+            ->setTo($toEmail);
 
-            if (!empty($htmlBody)) {
-                $message->setBody($htmlBody, 'text/html');
-                $message->addPart($textBody, 'text/plain');
-            } else {
-                $message->setBody($textBody);
-            }
-        } catch (\Exception $e) {
-            if (isset($oldLocale)) {
-                $this->translator->setLocale($oldLocale);
-                $this->setRouterLocale();
-            }
-            throw $e;
+        if (!empty($htmlBody)) {
+            $message->setBody($htmlBody, 'text/html');
+            $message->addPart($textBody, 'text/plain');
+        } else {
+            $message->setBody($textBody);
         }
+
+
         if (($result = $this->mailer->send($message)) === false) {
+            $this->revertLocale();
             throw new MailerException('Error occurred while sending emails');
         }
+        $this->revertLocale();
         return $result;
     }
 
+    /**
+     * @param $locale
+     */
+    private function setLocale($locale)
+    {
+        $this->oldLocale = $this->translator->getLocale();
+        $this->translator->setLocale($locale);
+        $this->setRouterLocale();
+    }
+
+
+    private function revertLocale()
+    {
+        if ($this->oldLocale) {
+            $this->setLocale($this->oldLocale);
+            $this->oldLocale = null;
+        }
+    }
 
     private function setRouterLocale()
     {
