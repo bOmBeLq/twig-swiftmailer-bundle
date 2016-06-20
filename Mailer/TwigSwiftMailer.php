@@ -52,11 +52,9 @@ class TwigSwiftMailer
      * @return bool
      * @throws MailerException
      */
-    public function sendMessage($templateName, $context, $fromEmail, $toEmail, $locale = null)
+    public function sendMessage($templateName, array $context, $fromEmail, $toEmail, $locale = null)
     {
-        if ($locale) {
-            $this->setLocale($locale);
-        }
+        $this->setLocale($locale);
         $template = $this->twig->loadTemplate($templateName);
         $subject = $template->renderBlock('subject', $context);
         $textBody = $template->renderBlock('body_text', $context);
@@ -84,12 +82,26 @@ class TwigSwiftMailer
     }
 
     /**
+     * @param $templateName
+     * @param array $context
+     * @param $fromEmail
+     * @param RecipientInterface $recipient
+     * @return bool
+     */
+    public function sendToRecipient($templateName, array $context, $fromEmail, RecipientInterface $recipient)
+    {
+        return $this->sendMessage($templateName, $context, $fromEmail, $recipient->getEmail(), $recipient->getLocale());
+    }
+
+    /**
      * @param $locale
      */
-    private function setLocale($locale)
+    private function setLocale($locale = null)
     {
         $this->oldLocale = $this->translator->getLocale();
-        $this->translator->setLocale($locale);
+        if ($locale) {
+            $this->translator->setLocale($locale);
+        }
         $this->setRouterLocale();
     }
 
